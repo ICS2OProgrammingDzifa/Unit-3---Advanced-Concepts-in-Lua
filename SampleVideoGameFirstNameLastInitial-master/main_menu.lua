@@ -2,11 +2,12 @@
 --
 -- main_menu.lua
 -- Created by: Dzifa
--- Date: Month Day, Year
+-- Date: November 12, 2018
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
 -- Hide status bar
 display.setStatusBar(display.HiddenStatusBar)
+
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
