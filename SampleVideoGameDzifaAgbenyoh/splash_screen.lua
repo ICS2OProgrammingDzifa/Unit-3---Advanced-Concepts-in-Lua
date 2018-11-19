@@ -1,6 +1,5 @@
 
 -----------------------------------------------------------------------------------------
---
 -- splash_screen.lua
 -- Created by: Your Name
 -- Date: Month Day, Year
@@ -20,25 +19,44 @@ sceneName = "splash_screen"
 local scene = composer.newScene( sceneName )
 
 ----------------------------------------------------------------------------------------
+-- SOUNDS
+-----------------------------------------------------------------------------------------
+
+-- load a evil sound
+local evil = audio.loadSound("Sound/evil.mp3")
+local evilSoundChannel 
+
+----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
  
 -- The local variables for this scene
-local beetleship
-local scrollXSpeed = 8
-local scrollYSpeed = -3
-local jungleSounds = audio.loadSound("Sounds/animals144.mp3")
-local jungleSoundsChannel
+local vampire
+local scrollSpeed = 3
+local Monsterfun
+local backgroundImage
+
 
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------------------------------------------
 
--- The function that moves the beetleship across the screen
-local function moveBeetleship()
-    beetleship.x = beetleship.x + scrollXSpeed
-    beetleship.y = beetleship.y + scrollYSpeed
+
+-- Function: MoveVampire
+-- Input: this function accepts an event listener
+-- Output: none
+-- Description: This function adds the scroll speed to the x-value of the Vampire
+local function MoveVampire(event)
+    -- add the scroll speed to the x-value of the vampire
+    vampire.x = vampire.x + scrollSpeed
+
+
+    -- change the transparency of the vampire every time it moves
+    -- so that it fades out.
+    vampire.alpha = vampire.alpha - 0.00000000000001
 end
+
+
 
 -- The function that will go to the main menu 
 local function gotoMainMenu()
@@ -55,18 +73,32 @@ function scene:create( event )
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
-    -- set the background to be black
-    display.setDefault("background", 0, 0, 0)
+    -- Insert the background image
+     backgroundImage = display.newImageRect("Images/RainbowBackground@2x.png", 2048, 1536)
 
-    -- Insert the beetleship image
-    beetleship = display.newImageRect("Images/beetleship.png", 200, 200)
+    -- Insert the vampire image
+    Monsterfun = display.newImageRect("Images/Monsterfun.png", 500, 200)
 
-    -- set the initial x and y position of the beetleship
-    beetleship.x = 100
-    beetleship.y = display.contentHeight/2
+
+    -- set the initial x and y position of monsterfun.
+    Monsterfun.x = 500
+    Monsterfun.y = display.contentHeight/5
+    
+    -- Insert the vampire image
+    vampire = display.newImageRect("Images/vampire.png", 300, 200)
+
+    -- set the initial x and y position of the vampire
+    vampire.x = 500
+    vampire.y = display.contentHeight/2
+
+     -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( backgroundImage )
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
-    sceneGroup:insert( beetleship )
+    sceneGroup:insert( vampire )
+
+   -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( Monsterfun )
 
 end -- function scene:create( event )
 
@@ -90,11 +122,12 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-        -- start the splash screen music
-        jungleSoundsChannel = audio.play(jungleSounds )
 
-        -- Call the moveBeetleship function as soon as we enter the frame.
-        Runtime:addEventListener("enterFrame", moveBeetleship)
+        -- MoveVampire will be called over and over again
+        Runtime:addEventListener("enterFrame", MoveVampire)
+
+        -- play evil sound
+        evilSoundChannel = audio.play(evil)
 
         -- Go to the main menu screen after the given time.
         timer.performWithDelay ( 3000, gotoMainMenu)          
