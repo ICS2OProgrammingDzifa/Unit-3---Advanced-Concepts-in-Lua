@@ -6,7 +6,8 @@
 -- Description: This is the splash screen of the game. It displays the 
 -- company logo that...
 -----------------------------------------------------------------------------------------
-
+-- hide status bar
+display.hidestatusbar
 -- Use Composer Library
 local composer = require( "composer" )
 
@@ -23,7 +24,7 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
 
 -- load a evil sound
-local evil = audio.loadSound("Sound/evil.mp3")
+local evil = audio.loadSound("Sounds/evil.mp3")
 local evilSoundChannel 
 
 ----------------------------------------------------------------------------------------

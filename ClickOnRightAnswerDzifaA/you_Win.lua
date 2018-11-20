@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------------------
 -- you_lose.lua
 -- Created by: Gil Robern
--- Modified by: Your Name
+-- Modified by: Dzifa
 -- Date: Month Day, Year
 -- Description: This shows the player that they lost the game and plays a booing sound.
 -----------------------------------------------------------------------------------------
@@ -28,7 +28,8 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
-
+local youWinSOund = audio.load
+local youWinSoundChannel
 -- local variables for the scene
 local bkg
 
@@ -48,7 +49,7 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -- Display background
-    bkg = display.newImage("Images/You Win.png")
+    bkg = display.newImage("Images/You Win Screen.png")
     bkg.x = display.contentCenterX
     bkg.y = display.contentCenterY
     bkg.width = display.contentWidth

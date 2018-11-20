@@ -37,6 +37,7 @@ local scene = composer.newScene( sceneName )
 local bkg_image
 local playButton
 local creditsButton
+local instructionsButton
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -109,26 +110,50 @@ function scene:create( event )
     creditsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth*7/8,
-            y = display.contentHeight*7/8,
+            x = display.contentWidth*6.5/8,
+            y = display.contentHeight*6.8/8,
+            width = 300,
+            height = 200,
+
+
 
             -- Insert the images here
-            defaultFile = "Images/Credits Button Unpressed.png",
-            overFile = "Images/Credits Button Pressed.png",
+            defaultFile = "Images/CreditsButtonUnpressedDzifa@2x.png",
+            overFile = "Images/CreditsButtonUnpressedDzifa@2x.png",
 
             -- When the button is released, call the Credits transition function
             onRelease = CreditsTransition
         } ) 
-    
+--------------------------------------------------------------------------------------------
+
     -- ADD INSTRUCTIONS BUTTON WIDGET
+
+    -- Creating Instructions Button
+    instructionsButton = widget.newButton( 
+        {
+            -- Set its position on the screen relative to the screen size
+            x = display.contentWidth/4.7,
+            y = display.contentHeight*6.5/8,
+            width = 300,
+            height = 200,
+
+            -- Insert the images here
+            defaultFile = "Images/InstructionsButtonUnpressedDzifa@2x.png",
+            overFile = "Images/InstructionsButtonPressedDzifa@2x.png",
+
+            -- When the button is released, call the Instructions transition function
+            onRelease = instructionsButtonTransition
+        } ) 
+    
+
 
     -----------------------------------------------------------------------------------------
 
     -- Associating button widgets with this scene
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
-    
-    -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
+    sceneGroup:insert( instructionsButton )
+ 
 
 end -- function scene:create( event )   
 
