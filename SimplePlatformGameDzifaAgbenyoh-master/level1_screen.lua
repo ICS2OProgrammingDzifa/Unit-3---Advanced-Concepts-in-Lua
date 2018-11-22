@@ -1,4 +1,5 @@
 -----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 --
 -- level1_screen.lua
 -- Created by: Ms Raffin
@@ -54,9 +55,11 @@ local character
 
 local heart1
 local heart2
-local numLives = 2
+local heart3
+local numLives = 3
 
-local rArrow 
+local rArrow
+local lArrow 
 local uArrow
 
 local motionx = 0
@@ -70,9 +73,21 @@ local floor
 
 local ball1
 local ball2
+local ball3
 local theBall
 
 local questionsAnswered = 0
+
+-----------------------------------------------------------------------------------------
+--  Sound
+----------------------------------------------------------------------------------------- 
+-- GameOver Sound 
+local youLose = audio.loadSound("Sounds/youLose.mp3")
+local youLoseSoundChannel
+
+-- youWin Sound
+local Grease_Monkey = audio.loadSound("Sounds/Grease_Monkey.mp3")
+local Grease_MonkeySoundChannel
 
 -----------------------------------------------------------------------------------------
 -- LOCAL SCENE FUNCTIONS
@@ -82,6 +97,12 @@ local questionsAnswered = 0
 local function right (touch)
     motionx = SPEED
     character.xScale = 1
+end
+
+-- When left arrow is touched, move character right
+local function left (touch)
+    motionx = -SPEED
+    character.xScale = -1
 end
 
 -- When up arrow is touched, add vertical so it can jump
@@ -106,11 +127,13 @@ end
 
 local function AddArrowEventListeners()
     rArrow:addEventListener("touch", right)
+    lArrow:addEventListener("touch", left)
     uArrow:addEventListener("touch", up)
 end
 
 local function RemoveArrowEventListeners()
     rArrow:removeEventListener("touch", right)
+    lArrow:removeEventListener("touch", left)
     uArrow:removeEventListener("touch", up)
 end
 
@@ -152,15 +175,21 @@ end
 local function MakeSoccerBallsVisible()
     ball1.isVisible = true
     ball2.isVisible = true
+    ball3.isVisible = true
 end
 
 local function MakeHeartsVisible()
     heart1.isVisible = true
     heart2.isVisible = true
+    heart3.isVisible = true
 end
 
 local function YouLoseTransition()
     composer.gotoScene( "you_lose" )
+end
+
+local function YouWinTransition()
+    composer.gotoScene( "you_Win" )
 end
 
 local function onCollision( self, event )
@@ -192,22 +221,40 @@ local function onCollision( self, event )
             -- decrease number of lives
             numLives = numLives - 1
 
-            if (numLives == 1) then
+            if (numLives == 3) then
+                -- update hearts
+                heart1.isVisible = true
+                heart2.isVisible = true
+                heart3.isVisible = true
+                timer.performWithDelay(200, ReplaceCharacter)
+
+           elseif (numLives == 2) then
+                -- update hearts
+                heart1.isVisible = true
+                heart2.isVisible = true
+                heart3.isVisible = false
+                timer.performWithDelay(200, ReplaceCharacter) 
+
+            elseif (numLives == 1) then
                 -- update hearts
                 heart1.isVisible = true
                 heart2.isVisible = false
-                timer.performWithDelay(200, ReplaceCharacter) 
+                heart3.isVisible = false
+                timer.performWithDelay(200, ReplaceCharacter)
 
             elseif (numLives == 0) then
                 -- update hearts
                 heart1.isVisible = false
                 heart2.isVisible = false
+                heart3.isVisible = false
                 timer.performWithDelay(200, YouLoseTransition)
+                youLoseSoundChannel = audio.play(youLose)
             end
         end
 
         if  (event.target.myName == "ball1") or
-            (event.target.myName == "ball2") then
+            (event.target.myName == "ball2") or
+            (event.target.myName == "ball3") then
 
             -- get the ball that the user hit
             theBall = event.target
@@ -222,13 +269,17 @@ local function onCollision( self, event )
             composer.showOverlay( "level1_question", { isModal = true, effect = "fade", time = 100})
 
             -- Increment questions answered
-            questionsAnswered = questionsAnswered + 1
+            questionsAnswered = questionsAnswered + 1 
+            print("***questions answered = " .. questionsAnswered)
         end
 
         if (event.target.myName == "door") then
             --check to see if the user has answered 5 questions
             if (questionsAnswered == 3) then
-                -- after getting 3 questions right, go to the you win screen
+                Grease_MonkeySoundChannel = audio.play(Grease_Monkey)
+
+                print("***questions answered = " .. questionsAnswered)
+                YouWinTransition()
             end
         end        
 
@@ -250,6 +301,8 @@ local function AddCollisionListeners()
     ball1:addEventListener( "collision" )
     ball2.collision = onCollision
     ball2:addEventListener( "collision" )
+    ball3.collision = onCollision
+    ball3:addEventListener( "collision" )
 
     door.collision = onCollision
     door:addEventListener( "collision" )
@@ -262,6 +315,7 @@ local function RemoveCollisionListeners()
 
     ball1:removeEventListener( "collision" )
     ball2:removeEventListener( "collision" )
+    ball3:removeEventListener( "collision" )
 
     door:removeEventListener( "collision")
 
@@ -288,6 +342,7 @@ local function AddPhysicsBodies()
 
     physics.addBody(ball1, "static",  {density=0, friction=0, bounce=0} )
     physics.addBody(ball2, "static",  {density=0, friction=0, bounce=0} )
+    physics.addBody(ball3, "static",  {density=0, friction=0, bounce=0} )
 
     physics.addBody(door, "static", {density=1, friction=0.3, bounce=0.2})
 
@@ -447,6 +502,14 @@ function scene:create( event )
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( heart2 )
 
+    heart3 = display.newImageRect("Images/heart.png", 80, 80)
+    heart3.x = 210
+    heart3.y = 50
+    heart3.isVisible = true
+
+    -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( heart3 )
+
     --Insert the right arrow
     rArrow = display.newImageRect("Images/RightArrowUnpressed.png", 100, 50)
     rArrow.x = display.contentWidth * 9.2 / 10
@@ -454,6 +517,14 @@ function scene:create( event )
    
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( rArrow)
+
+    --Insert the left arrow
+    lArrow = display.newImageRect("Images/LeftArrowUnpressed.png", 100, 50)
+    lArrow.x = display.contentWidth * 7.5 / 10
+    lArrow.y = display.contentHeight * 9.5 / 10
+   
+    -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( lArrow)
 
     --Insert the left arrow
     uArrow = display.newImageRect("Images/UpArrowUnpressed.png", 50, 100)
@@ -508,6 +579,15 @@ function scene:create( event )
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( ball2 )
 
+    --ball3
+    ball3 = display.newImageRect ("Images/SoccerBall.png", 70, 70)
+    ball3.x = 765
+    ball3.y = 275
+    ball3.myName = "ball3"
+
+    -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( ball3 )
+
 end --function scene:create( event )
 
 -----------------------------------------------------------------------------------------
@@ -537,7 +617,7 @@ function scene:show( event )
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
 
-        numLives = 2
+        numLives = 3
         questionsAnswered = 0
 
         -- make all soccer balls visible

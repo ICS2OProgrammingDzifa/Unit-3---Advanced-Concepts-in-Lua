@@ -93,11 +93,11 @@ local function CheckPoints()
       -- moniter points till they reach 2
     if (numberCorrect == 2) then
 
-    -- display the you win screen
-    composer.gotoscene("you_Win")
+        -- display the you win screen
+        composer.gotoScene("you_Win")
 
-    -- play you win sound
-    -- youWinSoundChannel = audio.play(youWInSound)
+        -- play you win sound
+        -- youWinSoundChannel = audio.play(youWInSound)
    end
 end
 
@@ -128,7 +128,7 @@ local function DisplayAnswers( )
     elseif (answerPosition == 2) then
        
         answerTextObject.x = display.contentWidth*.3       
-        wrongAnswer1TextObject.x = display.contentWidth*.1
+        wrongAnswer1TextObject.x = display.contentWidth*.2
         wrongAnswer2TextObject.x = display.contentWidth*.2
         wrongAnswer3TextObject.x = display.contentWidth*.4
 
