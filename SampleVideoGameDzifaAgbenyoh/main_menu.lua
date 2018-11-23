@@ -1,5 +1,4 @@
 -----------------------------------------------------------------------------------------
---
 -- main_menu.lua
 -- Created by: Your Name
 -- Date: Month Day, Year
@@ -37,6 +36,7 @@ local playButton
 local creditsButton
 local playButton
 local instructionsButton
+
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -93,7 +93,7 @@ function scene:create( event )
         {   
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth/6,
-            y = display.contentHeight*6.5/8,
+            y = display.contentHeight*6.7/8,
             width = 200,
             height = 200,
 
@@ -124,16 +124,15 @@ function scene:create( event )
             onRelease = CreditsTransition
         } ) 
     
-    -- ADD INSTRUCTIONS BUTTON WIDGET
 
     -----------------------------------------------------------------------------------------
 
-    -- Creating Credits Button
+    -- Creating Instructions Button
     InstructionsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth*3.9/8,
-            y = display.contentHeight*6.7/8,
+            y = display.contentHeight*6.5/8,
             width = 200,
             height = 200,
 
@@ -144,6 +143,7 @@ function scene:create( event )
             -- When the button is released, call the Credits transition function
             onRelease = InstructionsTransition
         } ) 
+     
 
     -- Associating button widgets with this scene
     sceneGroup:insert( playButton )
@@ -153,6 +153,8 @@ function scene:create( event )
     -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
 
 end -- function scene:create( event )   
+
+----------------------------------------------------------------------------------------
 
 
 
