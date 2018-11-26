@@ -563,7 +563,7 @@ function scene:create( event )
 
     --ball1
     ball1 = display.newImageRect ("Images/SoccerBall.png", 70, 70)
-    ball1.x = 610
+    ball1.x = 700
     ball1.y = 480
     ball1.myName = "ball1"
 

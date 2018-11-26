@@ -21,9 +21,9 @@ local scene = composer.newScene( sceneName )
 ----------------------------------------------------------------------
 --SOUNDS
 ----------------------------------------------------------------------
--- make a evil sound
-local evil = audio.loadSound("Sound/evil.mp3")
-local evilSoundChannel 
+-- Correct sound
+local evilSound = audio.loadSound( "Sounds/evil.mp3" ) -- Setting a variable to an mp3 file
+local evilSoundChannel
 
 ----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES

@@ -6,7 +6,12 @@
 -- Date: November 20, 2018
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
-
+-----------------------------------------------------------------------------------------
+-- SOUNDS
+-----------------------------------------------------------------------------------------
+--Spring sound effect
+ local wrongsound = audio.loadSound( "Sounds/WrongBuzzer.mp3" )
+ local wrongSoundChannel
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -63,6 +68,8 @@ local wrongAnswer3TextObject
 -- displays the number correct that the user has
 local numberCorrectText 
 local numberCorrect = 0
+-- play sound
+wrongSoundChannel = audio.play(wrongsound)
 
 -- displays the number of lives the user has
 local livesText 
