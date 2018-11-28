@@ -1,5 +1,4 @@
 -----------------------------------------------------------------------------------------
---
 -- level1_screen.lua
 -- Created by: Allison
 -- Date: May 16, 2017
@@ -37,14 +36,17 @@ local questionText
 
 local firstNumber
 local secondNumber
+local thirdNumber
 
 local answer
 local wrongAnswer1
 local wrongAnswer2
+local wrongAnswer3
 
 local answerText 
 local wrongAnswerText1
 local wrongAnswerText2
+local wrongAnswerText3
 
 local answerPosition = 1
 local bkg
@@ -82,7 +84,7 @@ local function TouchListenerAnswer(touch)
 end
 
 --checking to see if the user pressed the right answer and bring them back to level 1
-local function TouchListenerWrongAnswer(touch)
+local function TouchListenerWrongAnswer1(touch)
     userAnswer = wrongText1.text
     
     if (touch.phase == "ended") then
@@ -105,11 +107,23 @@ local function TouchListenerWrongAnswer2(touch)
 end
 
 
+--checking to see if the user pressed the right answer and bring them back to level 1
+local function TouchListenerWrongAnswer3(touch)
+    userAnswer = wrongText3.text
+    
+    if (touch.phase == "ended") then
+
+        BackToLevel1( )
+        
+    end 
+end
+
 --adding the event listeners 
 local function AddTextListeners ( )
     answerText:addEventListener( "touch", TouchListenerAnswer )
-    wrongText1:addEventListener( "touch", TouchListenerWrongAnswer)
+    wrongText1:addEventListener( "touch", TouchListenerWrongAnswer1)
     wrongText2:addEventListener( "touch", TouchListenerWrongAnswer2)
+    wrongText3:addEventListener( "touch", TouchListenerWrongAnswer3)
 end
 
 --removing the event listeners
@@ -117,6 +131,7 @@ local function RemoveTextListeners()
     answerText:removeEventListener( "touch", TouchListenerAnswer )
     wrongText1:removeEventListener( "touch", TouchListenerWrongAnswer)
     wrongText2:removeEventListener( "touch", TouchListenerWrongAnswer2)
+    wrongText3:removeEventListener( "touch", TouchListenerWrongAnswer3)
 end
 
 local function DisplayQuestion()
@@ -130,6 +145,7 @@ local function DisplayQuestion()
     -- calculate wrong answers
     wrongAnswer1 = answer + math.random(1, 3)
     wrongAnswer2 = answer + math.random(4, 6)
+    wrongAnswer3 = answer + math.random(4, 6)
 
 
     --creating the question depending on the selcetion number
@@ -140,6 +156,7 @@ local function DisplayQuestion()
     
     --creating wrong answers
     wrongText1.text = wrongAnswer1
+    wrongText2.text = wrongAnswer2
     wrongText2.text = wrongAnswer2
 end
 

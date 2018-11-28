@@ -10,8 +10,18 @@
 -- SOUNDS
 -----------------------------------------------------------------------------------------
 --Spring sound effect
- local wrongsound = audio.loadSound( "Sounds/WrongBuzzer.mp3" )
- local wrongSoundChannel
+local wrongsound = audio.loadSound( "Sounds/WrongBuzzer.mp3" )
+local wrongSoundChannel
+
+local correctsound = audio.loadSound( "Sounds/CorrectAnswer.mp3" )
+local correctSoundChannel
+
+local lionessGrowlsound = audio.loadSound( "Sounds/lionessGrowl.mp3" )
+local lionessGrowlSoundChannel
+
+local Kids Booingsound = audio.loadSound( "Sounds/Kids Booing.mp3" )
+local lionessGrowlSoundChannel
+
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -64,12 +74,13 @@ local answerTextObject
 local wrongAnswer1TextObject
 local wrongAnswer2TextObject
 local wrongAnswer3TextObject
+local numberincorrect
 
 -- displays the number correct that the user has
 local numberCorrectText 
 local numberCorrect = 0
 -- play sound
-wrongSoundChannel = audio.play(wrongsound)
+
 
 -- displays the number of lives the user has
 local livesText 
@@ -98,15 +109,17 @@ local alreadyClickedAnswer = false
 -----------------------------------------------------------------------------------------
 local function CheckPoints()
       -- moniter points till they reach 2
-    if (numberCorrect == 2) then
+    if (numberincorrect == 2) then
 
-        -- display the you win screen
-        composer.gotoScene("you_Win")
+        -- display the you lose screen
+        composer.gotoScene("you_lose")
+        lionessGrowlSoundChannel = audio.play(lionessGrowlSound)
 
         -- play you win sound
         -- youWinSoundChannel = audio.play(youWInSound)
    end
 end
+
 
 local function DetermineAnswers()
     -- calculate the correct answer as well as the wrong answers
@@ -130,13 +143,13 @@ local function DisplayAnswers( )
         answerTextObject.x = display.contentWidth*.4        
         wrongAnswer1TextObject.x = display.contentWidth*.1
         wrongAnswer2TextObject.x = display.contentWidth*.2
-        wrongAnswer3TextObject.x = display.contentWidth*.4
+        wrongAnswer3TextObject.x = display.contentWidth*.3
 
     elseif (answerPosition == 2) then
        
         answerTextObject.x = display.contentWidth*.3       
         wrongAnswer1TextObject.x = display.contentWidth*.2
-        wrongAnswer2TextObject.x = display.contentWidth*.2
+        wrongAnswer2TextObject.x = display.contentWidth*.1
         wrongAnswer3TextObject.x = display.contentWidth*.4
 
     elseif (answerPosition == 3) then
@@ -183,7 +196,6 @@ local function DisplayAddEquation()
     
 end
 
-
 local function RestartScene()
 
     alreadyClickedAnswer = false
@@ -191,11 +203,21 @@ local function RestartScene()
     incorrect.isVisible = false
 
     livesText.text = "Number of lives = " .. tostring(lives)
-    numberCorrectText.text = "Number correct = " .. tostring(numberCorrect)
+    numberCorrectText.text = "NumberCorrect = " .. tostring(numberCorrect)
 
-    -- if they have 2 lives, go to the You Lose screen
-    if (lives == 2) then
-        composer.gotoScene("you_Win")
+    -- if they have 0 lives, go to the You Lose screen
+    if (lives == 0) then
+        composer.gotoScene("you_lose")
+
+        lionessGrowlSoundChannel = audio.play(lionessGrowlSound)
+        audio.stop(lionessGrowlSoundChannel)
+
+
+    elseif
+        (Correct == 3) then
+        composer.gotoScene("you_win")
+
+
     else 
 
         DisplayAddEquation()
@@ -203,6 +225,24 @@ local function RestartScene()
         DisplayAnswers()
     end
 end
+
+local function CheckPoints()
+        -- monitor points till they reach 2
+    if (numberCorrect == 2) then
+
+        -- display the you win screen
+        composer.gotoScene("you_Win")
+
+        --play you win sound
+        youwinSoundChannel = audio.play(youwinSound)
+
+        --stop bkg music
+        audio.stop(bkgSoundChannel)
+
+        
+    end
+end
+
 
 -- Functions that checks if the buttons have been clicked.
 local function TouchListenerAnswer(touch)
@@ -236,10 +276,13 @@ local function TouchListenerWrongAnswer1(touch)
 
 
         if (answer ~= tonumber(userAnswer)) then
+            -- display you lose
+
             -- decrease a life
             lives = lives - 1
             -- call RestartScene after 1 second
-            timer.performWithDelay( 1000, RestartScene )            
+            timer.performWithDelay( 1000, RestartScene )
+            wrongSoundChannel = audio.play(wrongsound)            
         end        
 
     end
@@ -261,7 +304,8 @@ local function TouchListenerWrongAnswer2(touch)
                 -- decrease a life
                 lives = lives - 1
                 -- call RestartScene after 1 second
-                timer.performWithDelay( 1000, RestartScene )            
+                timer.performWithDelay( 1000, RestartScene )
+                wrongSoundChannel = audio.play(wrongsound)            
             end        
     
         end
@@ -283,7 +327,8 @@ local function TouchListenerWrongAnswer3(touch)
                 -- decrease a life
                 lives = lives - 1
                 -- call RestartScene after 1 second
-                timer.performWithDelay( 1000, RestartScene )            
+                timer.performWithDelay( 1000, RestartScene )
+                wrongSoundChannel = audio.play(wrongsound)          
             end        
     
         end
@@ -334,6 +379,7 @@ function scene:create( event )
     bkg.width = display.contentWidth
     bkg.height = display.contentHeight
 
+    local numberCorrect = 0
     -- create the text object that will hold the add equation. Make it empty for now.
     addEquationTextObject = display.newText( "", display.contentWidth*1/4, display.contentHeight*2/5, nil, 50 )
 
@@ -346,6 +392,7 @@ function scene:create( event )
     wrongAnswer2TextObject = display.newText("", display.contentWidth*.2, display.contentHeight/2, nil, 50 )
     numberCorrectText = display.newText("", display.contentWidth*4/5, display.contentHeight*6/7, nil, 25)
     wrongAnswer3TextObject = display.newText("", display.contentWidth*.1, display.contentHeight/2, nil, 50 )
+    wrongAnswer4TextObject = display.newText("", 50, display.contentHeight/2, nil, 50 )
 
     -- create the text object that will hold the number of lives
     livesText = display.newText("", display.contentWidth*4/5, display.contentHeight*8/9, nil, 25) 
@@ -411,7 +458,7 @@ function scene:show( event )
     elseif ( phase == "did" ) then
 
         -- initialize the number of lives and number correct 
-        lives = 3
+        lives = 2
         numberCorrect = 0
 
         -- listeners to each of the answer text objects

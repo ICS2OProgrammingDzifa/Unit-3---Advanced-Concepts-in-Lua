@@ -25,11 +25,6 @@ sceneName = "you_Win"
 -- Creating Scene Object
 local scene = composer.newScene( sceneName )
 
------------------------------------------------------------------------------------------
--- LOCAL VARIABLES
------------------------------------------------------------------------------------------
-local youWinSOund = audio.load
-local youWinSoundChannel
 -- local variables for the scene
 local bkg
 

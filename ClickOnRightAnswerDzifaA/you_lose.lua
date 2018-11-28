@@ -5,7 +5,11 @@
 -- Date: Month Day, Year
 -- Description: This shows the player that they lost the game and plays a booing sound.
 -----------------------------------------------------------------------------------------
-
+ ---------------------------------------------------------------------------------------
+ -- SOUNDS
+ ---------------------------------------------------------------------------------------
+ local lionessGrowlsound = audio.loadSound( "Sounds/lionessGrowl.mp3" )
+ local lionessGrowlSoundChannel
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -83,6 +87,7 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
+        lionessGrowlSoundChannel = audio.play(lionessGrowlSound)
     end
 
 end
@@ -110,6 +115,9 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+        
+        
+        
     end
 
 end
